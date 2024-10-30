@@ -67,3 +67,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+.no-hover:hover {
+  pointer-events: none;
+}
+iframe:hover {
+  pointer-events: none;
+}
