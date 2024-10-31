@@ -1,38 +1,66 @@
-import Navbar from '@/components/Navbar'
-import React from 'react'
-import { Vortex } from "@/components/ui/vortex";
+"use client";
+import React, { useEffect, useState } from 'react';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
+import { clusterApiUrl } from '@solana/web3.js';
+import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { Vortex } from "@/components/ui/vortex";
+import { WalletAdapter } from '@solana/wallet-adapter-base';
+import MintingCard from '@/components/MintingCard';
 
-const page = () => {
+const Page = () => {
+  const network = "devnet"; // Solana network configuration
+  const endpoint = clusterApiUrl(network);
+
+  const [wallets, setWallets] = useState<WalletAdapter[]>([]);
+
+  // Setting up wallet adapters using useEffect
+  useEffect(() => {
+    const setupWallets = () => {
+      setWallets([
+        new PhantomWalletAdapter(),
+        new SolflareWalletAdapter({ network }),
+      ]);
+    };
+
+    setupWallets();
+  }, [network]);
 
   return (
-    <Vortex
-      backgroundColor="black"
-      className="mx-auto rounded-md  min-h-screen overflow-hidden flex items-center flex-col justify-between px-2 md:px-10  py-6"
-    >
-      <Navbar />
-      <div className="bg-white shadow-lg rounded-xl md:w-[22vw] ">
-        <div className="h-[40vh] pt-5 rounded-xl relative">
-          <iframe
-            src="https://giphy.com/embed/prhu1VNvjvJQNaJnEc"
-            title="Giphy Embed"
-            width="100%"
-            height="100%"
-            className="pointer-events-none"
-          ></iframe>
-          <div className="absolute inset-0"></div>
-        </div>
-        <div className="flex flex-col gap-1 p-5">
-          <p className='font-bold text-md text-black'>Mint the master key to win a Prize Poll of $30,000</p>
-          <p className='text-md text-gray-700'>18 hrs 19 min left vdr6e8v68...1y6etv1 to win</p>
-          <button className='w-full font-bold text-md h-8 text-white bg-black rounded-md'>Mint for 0.32 SOL</button>
-        </div>
-      </div>
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets} autoConnect>
+        <WalletModalProvider>
+          <Vortex
+            backgroundColor="black"
+            className="mx-auto rounded-md min-h-screen overflow-hidden flex items-center flex-col justify-between px-2 md:px-10 py-6"
+          >
+            {/* Navbar component */}
+            <Navbar />
 
-      <Footer />
+            {/* Share link button */}
+            <span className="font-bold text-lg bg-white rounded-md w-40 flex items-center justify-center gap-3 px-5 py-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-share-2">
+                <circle cx="18" cy="5" r="3" />
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="19" r="3" />
+                <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
+                <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
+              </svg>
+              Share link
+            </span>
 
-    </Vortex>
-  )
-}
+            {/* Minting card component */}
+            <MintingCard />
 
-export default page
+            {/* Footer component */}
+            <Footer />
+          </Vortex>
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
+  );
+};
+
+export default Page;
