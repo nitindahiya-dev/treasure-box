@@ -7,16 +7,19 @@ import { clusterApiUrl } from '@solana/web3.js';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Vortex } from "@/components/ui/vortex";
-import { WalletAdapter } from '@solana/wallet-adapter-base';
 import MintingCard from '@/components/MintingCard';
+import { toast } from 'react-toastify'; // Import toast from react-toastify
+
+// Import Wallet Adapter types
+import type { Wallet } from '@solana/wallet-adapter-base';
 
 const Page = () => {
   const network = "devnet"; // Solana network configuration
   const endpoint = clusterApiUrl(network);
 
-  const [wallets, setWallets] = useState<WalletAdapter[]>([]);
+  // Explicitly type the wallets state
+  const [wallets, setWallets] = useState<Wallet[]>([]); 
 
-  // Setting up wallet adapters using useEffect
   useEffect(() => {
     const setupWallets = () => {
       setWallets([
@@ -28,6 +31,17 @@ const Page = () => {
     setupWallets();
   }, [network]);
 
+  // Function to handle share link click
+  const handleShareLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href); // Copy current URL to clipboard
+      toast.success("Link copied!"); // Show success toast
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+      toast.error("Failed to copy link."); // Show error toast if copying fails
+    }
+  };
+
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
@@ -36,11 +50,11 @@ const Page = () => {
             backgroundColor="black"
             className="mx-auto rounded-md min-h-screen overflow-hidden flex items-center flex-col justify-between px-2 md:px-10 py-6"
           >
-            {/* Navbar component */}
             <Navbar />
-
-            {/* Share link button */}
-            <span className="font-bold text-lg bg-white rounded-md w-40 flex items-center justify-center gap-3 px-5 py-2">
+            <span 
+              className="font-bold text-lg bg-white rounded-md w-40 flex items-center justify-center gap-3 px-5 py-2 cursor-pointer"
+              onClick={handleShareLink} // Add click handler
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-share-2">
                 <circle cx="18" cy="5" r="3" />
                 <circle cx="6" cy="12" r="3" />
@@ -50,11 +64,7 @@ const Page = () => {
               </svg>
               Share link
             </span>
-
-            {/* Minting card component */}
             <MintingCard />
-
-            {/* Footer component */}
             <Footer />
           </Vortex>
         </WalletModalProvider>

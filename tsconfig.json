@@ -1,34 +1,38 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node", // Changed from 'bundler' to 'node'
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
+    "target": "ES2017", // Set the JavaScript version to be compiled to
+    "lib": ["dom", "dom.iterable", "esnext"], // Include necessary libraries
+    "allowJs": true, // Allow JavaScript files to be compiled
+    "skipLibCheck": true, // Skip type checking of all declaration files
+    "strict": true, // Enable all strict type-checking options
+    "noEmit": true, // Prevent emitting files
+    "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules
+    "module": "esnext", // Specify module code generation
+    "moduleResolution": "node", // Use Node's module resolution strategy
+    "resolveJsonModule": true, // Allow importing .json files
+    "isolatedModules": true, // Ensure each file can be safely transpiled independently
+    "jsx": "preserve", // JSX code generation
+    "incremental": true, // Enable incremental compilation
     "plugins": [
       {
-        "name": "next"
+        "name": "next" // Enable Next.js specific features
       }
     ],
-    "types": ["framer-motion", "@solana/wallet-adapter-react"], // Added @solana/wallet-adapter-react types
+    "types": [
+      "framer-motion", // Type declarations for framer-motion
+      "@solana/wallet-adapter-react", // Type declarations for wallet-adapter
+      "@solana/spl-token" // Add type declarations for spl-token
+    ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"] // Path mapping for easier imports
     }
   },
   "include": [
-    "global.d.ts",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
+    "global.d.ts", // Include global type declarations
+    "next-env.d.ts", // Include Next.js environment types
+    "**/*.ts", // Include all TypeScript files
+    "**/*.tsx", // Include all TypeScript JSX files
+    ".next/types/**/*.ts" // Include Next.js generated types
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"] // Exclude node_modules from compilation
 }

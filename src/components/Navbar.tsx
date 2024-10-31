@@ -6,7 +6,7 @@ import '@solana/wallet-adapter-react-ui/styles.css';
 const Navbar = () => {
   return (
     <div className='flex justify-between items-center w-[80vw] mx-auto h-16 rounded-full px-5 backdrop-blur-lg bg-white/10 shadow-lg'>
-      <span className='text-white font-bold text-xl'>Logo</span>
+      <span className='text-white font-bold text-xl'>Treasure Box</span>
       <div className="flex items-center gap-4">
         <Link
           href={"https://solana-tools-xi.vercel.app/"}
@@ -30,6 +30,7 @@ const Navbar = () => {
           </svg>
         </Link>
         {/* Wallet Connect Button */}
+
         <WalletMultiButton />
       </div>
     </div>
